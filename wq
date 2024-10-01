@@ -1,0 +1,23 @@
+[33mcommit 104c05ebe3bb2e7287cf949d6da0402391d6e583[m[33m ([m[1;36mHEAD -> [m[1;32mtest[m[33m, [m[1;32mmain[m[33m)[m
+Author: prajapatsachin7078 <sp639856@gmail.com>
+Date:   Tue Oct 1 10:04:53 2024 +0530
+
+    changed port no
+
+[33mcommit a985536c5340e328b2c229b4ccda7eb90fbae2f5[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: prajapatsachin7078 <sp639856@gmail.com>
+Date:   Tue Oct 1 10:02:12 2024 +0530
+
+    removed corsoptoin to test deployment
+
+[33mcommit 02ff4ec455117ef412886f60614cf60a69b00053[m
+Author: prajapatsachin7078 <sp639856@gmail.com>
+Date:   Tue Oct 1 09:27:12 2024 +0530
+
+    push .env in .gitignore
+
+[33mcommit dbb2cc36c40eaa2a8a1e9c9f2154080957f4df30[m
+Author: prajapatsachin7078 <sp639856@gmail.com>
+Date:   Tue Oct 1 09:24:48 2024 +0530
+
+    prject repo created
