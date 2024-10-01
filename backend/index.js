@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: "https://secure-f055ihwc3-sachin-prajapatis-projects.vercel.app",
+    origin: "https://secure-pay-rust.vercel.app",
     credentials: true
 };
 app.use(cors(corsOptions));
