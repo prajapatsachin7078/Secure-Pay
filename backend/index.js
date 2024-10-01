@@ -20,12 +20,12 @@ app.use(cookieParser());
 // };
 app.use(cors());
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 app.use("/api/v1/user", userRoute);
 app.use('/api/v1/account',accountRoute);
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
     connectDB();
     console.log(`Server is listening at ${PORT}`);
 });
