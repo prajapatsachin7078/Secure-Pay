@@ -27,7 +27,7 @@ const AccountList = ({ filter, setFilter, users }) => {
                 setFilter('');
                 setAmount(0);
                 setIsModalOpen(false);
-                console.log(response.data);
+                // console.log(response.data);
             }).catch(err => {
                 console.log(err);
             })
