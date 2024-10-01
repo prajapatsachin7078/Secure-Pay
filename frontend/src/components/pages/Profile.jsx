@@ -76,8 +76,8 @@ function Profile() {
         }
 
         // Only send the updated fields
-        axios.put("http://localhost:3001/api/v1/user/profile/update", updatedData, {
-            withCredentials: true,
+        axios.put("https://secure-pay-lrdg.onrender.com/api/v1/user/profile/update", updatedData, {
+            withCredentials: true,  
         })
         .then(response => {
             // Update original data after successful update
