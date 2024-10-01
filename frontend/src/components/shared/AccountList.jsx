@@ -18,7 +18,7 @@ const AccountList = ({ filter, setFilter, users }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const to = selectedAccount._id;
-        console.log(to," ",amount)
+        // console.log(to," ",amount)
         axios.post("https://secure-pay-lrdg.onrender.com/api/v1/account/transfer",
             { to, amount },
             { withCredentials: true })
@@ -27,7 +27,7 @@ const AccountList = ({ filter, setFilter, users }) => {
                 setFilter('');
                 setAmount(0);
                 setIsModalOpen(false);
-                console.log(response.data);
+                // console.log(response.data);
             }).catch(err => {
                 console.log(err);
             })
