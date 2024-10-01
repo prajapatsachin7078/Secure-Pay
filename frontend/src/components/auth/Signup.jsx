@@ -20,7 +20,7 @@ function Signup() {
         //         'content-type':'multipart/form-data'
         //     }
         // }
-        axios.post("http://localhost:3001/api/v1/user/register",{
+        axios.post("https://secure-pay-lrdg.onrender.com/api/v1/user/register",{
             data:{
                 username,
                 password,

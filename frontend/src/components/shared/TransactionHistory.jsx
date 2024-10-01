@@ -7,7 +7,7 @@ function TransactionHistory() {
 
     useEffect(() => {
         // Fetch transaction data
-        axios.get("http://localhost:3001/api/v1/account/transactions", { withCredentials: true })
+        axios.get("https://secure-pay-lrdg.onrender.com/api/v1/account/transactions", { withCredentials: true })
             .then(response => {
                 setTransactions(response.data.transactions); // Assuming the API returns the transactions array
             })

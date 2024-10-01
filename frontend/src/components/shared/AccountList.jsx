@@ -19,7 +19,7 @@ const AccountList = ({ filter, setFilter, users }) => {
         e.preventDefault();
         const to = selectedAccount._id;
         console.log(to," ",amount)
-        axios.post("http://localhost:3001/api/v1/account/transfer",
+        axios.post("https://secure-pay-lrdg.onrender.com/api/v1/account/transfer",
             { to, amount },
             { withCredentials: true })
             .then(response => {

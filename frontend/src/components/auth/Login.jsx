@@ -15,7 +15,7 @@ function Login() {
         setErrorMessage('');
 
         try {
-            const response = await axios.post("http://localhost:3001/api/v1/user/login", {
+            const response = await axios.post("https://secure-pay-lrdg.onrender.com/api/v1/user/login", {
                 data: {
                     username,
                     password

@@ -8,7 +8,7 @@ const Balance = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         async function fetchBalance() {
-            axios.get("http://localhost:3001/api/v1/account/balance", { withCredentials: true })
+            axios.get("https://secure-pay-lrdg.onrender.com/api/v1/account/balance", { withCredentials: true })
                 .then(response => {
                     const balance = response.data.balance;
                     dispatch(setBalance(balance));

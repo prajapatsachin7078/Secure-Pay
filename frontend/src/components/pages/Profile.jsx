@@ -19,7 +19,7 @@ function Profile() {
 
     useEffect(() => {
         // Fetch user profile data
-        axios.get("http://localhost:3001/api/v1/user", { withCredentials: true })
+        axios.get("https://secure-pay-lrdg.onrender.com/api/v1/user", { withCredentials: true })
             .then(response => {
                 const { firstName, lastName, username } = response.data;
                 setFirstName(firstName);

@@ -10,7 +10,7 @@ function Dashboard() {
     const [filter, setFilter] = useState('');
     useEffect(() => {
         function fetchUsers(){
-            axios.get("http://localhost:3001/api/v1/user/bulk?filter=" + filter,{withCredentials:true})
+            axios.get("https://secure-pay-lrdg.onrender.com/api/v1/user/bulk?filter=" + filter,{withCredentials:true})
             .then(response => {
                 setUsers(response.data.user)
             })
