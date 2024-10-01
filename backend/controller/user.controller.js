@@ -68,7 +68,8 @@ export const login = async (req, res) => {
         // Set cookie
         res.cookie("token", token, {
             maxAge: 24 * 60 * 60 * 1000,
-            // secure: true,
+            secure: process.env.NODE_ENV === 'production', // true if in production
+            sameSite: 'None', // Required for cross-site cookies
             httpOnly:true
         });
         const account = await Account.findOne({userId:user._id});
