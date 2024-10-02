@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import TransactionHistory from '../shared/TransactionHistory'; // Import the TransactionHistory component
-import {useDispatch} from "react-redux";
+import TransactionHistory from '../shared/TransactionHistory';
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from '../../redux/authSlice';
+
 function Profile() {
     const [isEditing, setIsEditing] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
-    const [tempPicture, setTempPicture] = useState(null);
-    const [originalData, setOriginalData] = useState({});
-    const [showTransactions, setShowTransactions] = useState(false); // State to toggle transactions
+    const [showTransactions, setShowTransactions] = useState(false);
+    const [loading, setLoading] = useState(false); // Local loading state
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -21,11 +21,11 @@ function Profile() {
         // Fetch user profile data
         axios.get("https://secure-pay-lrdg.onrender.com/api/v1/user", { withCredentials: true })
             .then(response => {
-                const { firstName, lastName, username } = response.data;
+                const { firstName, lastName, username, profilePicture } = response.data;
                 setFirstName(firstName);
                 setLastName(lastName);
                 setUsername(username);
-                setOriginalData({ firstName, lastName, username }); // Store original data
+                setProfilePicture(profilePicture);
             })
             .catch(err => {
                 console.log(err);
@@ -36,57 +36,54 @@ function Profile() {
         setIsEditing(!isEditing);
     };
 
-    // Input change handler
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === "profilePicture") {
-            setTempPicture(URL.createObjectURL(e.target.files[0]));
-            setProfilePicture(e.target.files[0]);
+            setProfilePicture(e.target.files?.[0]);
         }
-        if (name === "firstName"){ 
+        if (name === "firstName") {
             setFirstName(value);
         }
         if (name === "lastName") setLastName(value);
         if (name === "username") setUsername(value);
     };
-    // Logout Handler
+
     const handleLogout = () => {
         localStorage.removeItem("username");
-        Cookies.remove('token'); // Remove token from cookies
-        navigate("/");// Redirect to homepage or login page
+        Cookies.remove('token');
+        navigate("/");
     };
 
-    // Profile Update Handler
     const handleSubmit = (e) => {
         e.preventDefault();
-        // send only data that get modified
-        const updatedData = {};
-        if (firstName !== originalData.firstName) {
-            dispatch(setUser(firstName));
-            updatedData.firstName = firstName;
-        }
-        if (lastName !== originalData.lastName) {
-            updatedData.lastName = lastName;
-        }
-        if (username !== originalData.username) {
-            updatedData.username = username;
-        }
+        setLoading(true); // Set loading to true on submit
+        const formData = new FormData();
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append('username', username);
+
         if (profilePicture) {
-            updatedData.profilePicture = profilePicture; // Include the profile picture if changed
+            formData.append('profilePicture', profilePicture);
         }
 
-        // Only send the updated fields
-        axios.put("https://secure-pay-lrdg.onrender.com/api/v1/user/profile/update", updatedData, {
-            withCredentials: true,  
+        axios.put("https://secure-pay-lrdg.onrender.com/api/v1/user/profile/update", formData, {
+            withCredentials: true,
+            headers: { 'Content-Type': 'multipart/form-data' }
         })
-        .then(response => {
-            // Update original data after successful update
-            setOriginalData(prevData => ({ ...prevData, ...updatedData }));
-            setIsEditing(false); // Disable editing mode after update
-        })
-        .catch(err => {
-            console.log(err);
-        });
+            .then(response => {
+                const { firstName, lastName, username, profilePicture } = response.data;
+                setFirstName(firstName);
+                setLastName(lastName);
+                setUsername(username);
+                setProfilePicture(profilePicture);
+                setIsEditing(false);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false); // Reset loading state
+            });
     };
 
     return (
@@ -100,8 +97,8 @@ function Profile() {
             </div>
 
             <div className="flex items-center my-4">
-                {tempPicture ? (
-                    <img src={tempPicture} alt="Profile" className="w-24 h-24 rounded-full mr-4" />
+                {profilePicture ? (
+                    <img src={profilePicture} alt="Profile" className="w-24 h-24 rounded-full mr-4" />
                 ) : (
                     <div className="w-24 h-24 rounded-full bg-gray-300 mr-4 flex items-center justify-center">
                         <span className="text-xl">No Image</span>
@@ -161,8 +158,38 @@ function Profile() {
                             className="p-2 border border-gray-300 rounded w-full"
                         />
                     </div>
-                    <button type="submit" className="bg-green-500 text-white p-2 rounded">
-                        Save Changes
+                    <button
+                        type="submit"
+                        className={`bg-green-500 text-white p-2 rounded flex items-center justify-center ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    />
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12c0-4.418 3.582-8 8-8s8 3.582 8 8H4z"
+                                    />
+                                </svg>
+                                Loading...
+                            </>
+                        ) : (
+                            'Save Changes'
+                        )}
                     </button>
                 </form>
             ) : (
@@ -174,8 +201,8 @@ function Profile() {
             )}
 
             {/* Toggle button for TransactionHistory */}
-            <button 
-                onClick={() => setShowTransactions(!showTransactions)} 
+            <button
+                onClick={() => setShowTransactions(!showTransactions)}
                 className="bg-gray-500 text-white p-2 rounded mb-4"
             >
                 {showTransactions ? "Hide Transactions" : "Show Transactions"}
