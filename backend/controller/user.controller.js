@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Account } from "../models/account.model.js";
+import getDataUri from "../utils/datauri.js";
+import { getCloudinaryURL } from "../utils/cloudinary.js";
 export const register = async (req, res) => {
     // console.log(req.body);
     const { username, password, firstName, lastName } = req.body.data;
@@ -95,7 +97,8 @@ export const login = async (req, res) => {
 export const updateProfile = async(req, res) => {
     const { username, password, firstName, lastName } = req.body;
     const userID = req.id;
-    
+    const profilePicture = req.file;
+    console.log(profilePicture)
     try {
         const user =  await User.findById(userID);
         if (!user) {
@@ -104,15 +107,24 @@ export const updateProfile = async(req, res) => {
                 success: false
             })
         }
+
+        const fileUri = getDataUri(profilePicture);
+        const profileURL = await getCloudinaryURL(fileUri);
+        
         if(username)user.username=username;
         if(password)user.password=password;
         if(firstName)user.firstName=firstName;
         if(lastName)user.lastName=lastName;
+        if(profileURL)user.profilePhoto=profileURL;
 
         await user.save();
         return res.status(200).json({
             message:"Profile updated successfully.",
-            success:true
+            success:true,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            profilePicture: profileURL
         })
     } catch (error) {
         console.log(error);
@@ -169,6 +181,7 @@ export const profile = async(req,res)=>{
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
+            profilePicture: user.profilePhoto
         })
     } catch (error) {
         console.log(error);

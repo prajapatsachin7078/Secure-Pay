@@ -28,8 +28,12 @@ const userSchema = new Schema({
         required: true,
         trim: true,
         maxLength: 50
+    },
+    profilePhoto: {
+        type: String,
+        default: ""
     }
-});
+}, { timestamps: true });
 
 // Create a model from the schema
 const User = model('User', userSchema);
