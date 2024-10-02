@@ -1,6 +1,7 @@
 // TransactionHistory.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ListShimmerEffect } from './ListShimmerEffect';
 
 function TransactionHistory() {
     const [transactions, setTransactions] = useState([]);
@@ -21,7 +22,7 @@ function TransactionHistory() {
             <h2 className="text-2xl font-semibold mb-4">Transaction History</h2>
             <ul className="space-y-4">
                 {transactions.length === 0 ? (
-                    <li className="text-gray-500">No transactions found.</li>
+                    <ListShimmerEffect/>
                 ) : (
                     transactions.map(transaction => (
                         <li key={transaction._id} className={`flex justify-between items-center p-4 rounded-lg shadow hover:shadow-md transition duration-200 ${transaction.type === 'debit' ? 'bg-red-100' : 'bg-green-100'}`}>
