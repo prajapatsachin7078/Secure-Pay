@@ -14,10 +14,24 @@ app.use(json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+const allowedOrigins = [
+    "https://secure-pay-rust.vercel.app",
+    "https://secure-pay-sachin-prajapatis-projects.vercel.app"
+];
+
 const corsOptions = {
-    origin: "https://secure-pay-rust.vercel.app",
+    origin: (origin, callback) => {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            // Allow the request if the origin is in the allowedOrigins array or if there is no origin
+            callback(null, true);
+        } else {
+            // Otherwise, reject the request
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 };
+
 app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
