@@ -29,7 +29,7 @@ export const register = async (req, res) => {
         const userId = newUser._id;
         await Account.create({
             userId,
-            balance: 1 + Math.random() * 100000
+            balance: 1 + Math.random() * 1000000
         })
         res.json({
             message: "User registered successfully.."
